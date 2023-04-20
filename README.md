@@ -14,8 +14,7 @@ The following should be installed onto the user's machine first, for this projec
 VS Code (or similar IDE)
 Node.js
 Node Package Manager (NPM)
-MYSQL
-Insomnia 
+Compass
 ```
 Once you have the above applications installed, you can clone the repo to your local machine from my GitHub: <br> <br>
 
