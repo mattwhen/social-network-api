@@ -4,9 +4,9 @@
   "description": "## Description",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon index.js",
-    "seed": "node util/seed"
+    "start": "node index",
+    "dev": "nodemon index",
+    "seed": "node utils/seed"
   },
   "author": "mattwhen",
   "license": "MIT",
