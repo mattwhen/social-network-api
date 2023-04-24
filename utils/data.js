@@ -85,8 +85,7 @@ const names = [
     `${getRandomArrItem(names)}${Math.floor(Math.random() * (500 - 100) + 100)}`;
 
   // Generate a random email address using the username
-    const getRandomEmail = () => 
-    `${getRandomUserName}@email.com`;
+    const getRandomEmail = () => `${getRandomArrItem(names)}${Math.floor(Math.random() * (500 - 100) + 100)}@email.com`;
   
 //   // Function to generate random assignments that we can add to student object.
 //   const getRandomAssignments = (int) => {

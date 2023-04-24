@@ -17,6 +17,7 @@ connection.once('open', async () => {
   for (let i = 1; i <= 20; i++) {
     const username = getRandomUserName();
     const email = getRandomEmail();
+    console.log(email);
     // const fullName = getRandomUserName();
     // const first = fullName.split(' ')[0];
     // const last = fullName.split(' ')[1];
