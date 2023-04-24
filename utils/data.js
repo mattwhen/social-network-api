@@ -85,8 +85,8 @@ const names = [
     `${getRandomArrItem(names)}${Math.floor(Math.random() * (500 - 100) + 100)}`;
 
   // Generate a random email address using the username
-    // const getRandomEmail = () => 
-    // `${getRandomUserName}@email.com`;
+    const getRandomEmail = () => 
+    `${getRandomUserName}@email.com`;
   
 //   // Function to generate random assignments that we can add to student object.
 //   const getRandomAssignments = (int) => {
@@ -101,5 +101,5 @@ const names = [
 //   };
   
   // Export the functions for use in seed.js
-  module.exports = { getRandomUserName };
+  module.exports = { getRandomUserName, getRandomEmail };
   

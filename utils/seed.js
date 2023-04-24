@@ -15,15 +15,15 @@ connection.once('open', async () => {
 //   const applications = getRandomApplications(10);
 
   for (let i = 1; i <= 20; i++) {
-    const userName = getRandomUserName();
-    // const email = getRandomEmail;
+    const username = getRandomUserName();
+    const email = getRandomEmail();
     // const fullName = getRandomUserName();
     // const first = fullName.split(' ')[0];
     // const last = fullName.split(' ')[1];
 
     users.push({
-      userName,
-    //   email,
+      username,
+      email,
     });
   }
 
