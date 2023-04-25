@@ -12,16 +12,23 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get() {
+            timestamp: true,
+            get: function dateFormat(timestamp) {
 
-            } 
+            },
         },
         username: {
             type: String,
             required: true,
         },
-        reactions: {
-            
-        }
+        reactions: [reactionSchema],
+    },
+    {
+        toJSON: {
+            getters: true,
+            virtuals: true,
+        },
+        id: false, /* When set to false, you are telling Mongoose to NOT 
+                     create an _id field for your documents */
     }
 );
