@@ -33,9 +33,9 @@ userSchema
   // Getter
   .get(function () {
     return `${this.friends.length}`;
-  })
+  });
 
-// Compile our Schema into a Model
+// Compile our Schema into a Model, an instance of a model is called a document.
 // Model is a class with which we contruct documents.
 const User = model("user", userSchema);
 
