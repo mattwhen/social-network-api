@@ -8,18 +8,13 @@ const {
 } = require('../../controllers/userController');
 
 // /api/users
-router.route('/').get(getUsers);
+router.route('/').get(getUsers).post(createUser);
 
 // /api/users/:userId
-router.route('/:userId').get(getSingleUser);
+router.route('/:userId').get(getSingleUser).put(updateUser).delete(deleteUser);
 
-// /api/users
-router.route('/').post(createUser);
+router.route('/:userId/friends/:friendId')
 
-// /api/users
-router.route('/').put(updateUser);
 
-// /api/api/:userId
-router.route('/:userId').delete(deleteUser);
 
 module.exports = router;
