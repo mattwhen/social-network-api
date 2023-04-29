@@ -33,8 +33,12 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thoughts = await Thought.create(req.body);
+      console.log('Our request to create a new thought',req.body);
+      const user = await User.findOneAndUpdate(
+        { username: req.body.username },
+        { $push: { thoughts } },
+      );
       res.json(thoughts);
-      console.log(thoughts);
     } catch (err) {
       res.status(500).json("System error :(", err);
     }

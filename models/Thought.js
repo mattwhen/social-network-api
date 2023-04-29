@@ -21,7 +21,7 @@ const thoughtSchema = new Schema(
             type: String,
             required: true,
         },
-        reactions: [reactionSchema], // Array of subdocuments
+        reactions: [reactionSchema], // Array of nested subdocuments
     },
     {
         toJSON: {
@@ -35,12 +35,12 @@ const thoughtSchema = new Schema(
 
 /* Create a virtual called reactionCount that retrieves 
 the length of the thought's reactions array field on query. */
+// Think of this as a 'virutal' column that is created after defining our fields in the Schema.
 thoughtSchema.virtual('reactionCount').get(function() {
-    console.log('Here is our Thought model layout', thoughtSchema);
     return this.reactions.length; 
 });
 
-// Compile our Schema into a Model
+// Compile our Schema into a Model and name it 'thought' 
 // Model is a class with which we construct documents.
 const Thought = model('thought', thoughtSchema);
 

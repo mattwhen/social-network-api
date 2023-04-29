@@ -4,7 +4,7 @@ module.exports = {
   // Get all users (GET)
   async getUsers(req, res) {
     try {
-      const users = await User.find({});
+      const users = await User.find().populate("friends");
       console.log(req);
       res.json(users);
     } catch (err) {
@@ -54,9 +54,46 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // BONUS: Application deletes a user's associated thoughts when the user is deleted.
-  // Delete a user and associated thoughts
+  // Delete a user by ID (DELETE)
   async deleteUser(req, res) {
+    try {
+      const user = await User.findOneAndDelete(
+        { _id: params.userId }, 
+        {}
+        );
+    } catch (err) {
+      res.status(500).json({ message: "Couldn't delete user" });
+    }
+  },
+  // Add a new friend to a user's friend list (POST)
+  async addFriend({ params }, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: params.userId },
+        { $addToSet: { friends: params.friendId } },
+        { new: true, runValidators: true }
+      );
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ message: "Can't add friend" });
+    }
+  },
+  async deleteFriend({ params }, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: params.userId },
+        { $pull: { friends: params.friendId } },
+        { new: true }
+      );
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ message: "Can't delete friend" });
+    }
+  },
+
+  // // BONUS: Application deletes a user's associated thoughts when the user is deleted.
+  // // Delete a user and associated thoughts
+  async delete(req, res) {
     try {
       const user = await User.findOneAndDelete({ _id: req.params.userId });
 
@@ -64,7 +101,7 @@ module.exports = {
         return res.status(404).json({ message: "No user with that ID" });
       }
 
-      await Application.deleteMany({ _id: { $in: user.thoughts } });
+      await Thought.deleteMany({ _id: { $in: user.thoughts } });
       res.json({ message: "User and associated thoughts deleted!" });
     } catch (err) {
       res.status(500).json(err);
