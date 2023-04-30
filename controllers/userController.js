@@ -54,30 +54,35 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Delete a user by ID (DELETE)
+  // Delete a user by id AND it's associated thoughts (DELETE)(BONUS)
   async deleteUser(req, res) {
     try {
-      const user = await User.findOneAndDelete(
-        { _id: params.userId }, 
-        {}
-        );
-    } catch (err) {
+      const user = await User.findOneAndDelete({ _id: req.params.userId });
+
+      if (!user) return res.status(404).json({ message: "No user with that ID" });
+
+      await Thought.deleteMany({ _id: { $in: user.thoughts } });
+      res.json({ message: "User and associated thoughts deleted!" });
+    } 
+    catch (err) {
       res.status(500).json({ message: "Couldn't delete user" });
     }
   },
   // Add a new friend to a user's friend list (POST)
   async addFriend({ params }, res) {
+    console.log({ params });
     try {
       const user = await User.findOneAndUpdate(
         { _id: params.userId },
         { $addToSet: { friends: params.friendId } },
         { new: true, runValidators: true }
       );
-      res.json(user);
+      res.json(user, { message: "Added Friend" });
     } catch (err) {
       res.status(500).json({ message: "Can't add friend" });
     }
   },
+  // Delete a friend from a user's friend list (DELETE)
   async deleteFriend({ params }, res) {
     try {
       const user = await User.findOneAndUpdate(
@@ -88,23 +93,6 @@ module.exports = {
       res.json(user);
     } catch (err) {
       res.status(500).json({ message: "Can't delete friend" });
-    }
-  },
-
-  // // BONUS: Application deletes a user's associated thoughts when the user is deleted.
-  // // Delete a user and associated thoughts
-  async delete(req, res) {
-    try {
-      const user = await User.findOneAndDelete({ _id: req.params.userId });
-
-      if (!user) {
-        return res.status(404).json({ message: "No user with that ID" });
-      }
-
-      await Thought.deleteMany({ _id: { $in: user.thoughts } });
-      res.json({ message: "User and associated thoughts deleted!" });
-    } catch (err) {
-      res.status(500).json(err);
     }
   },
 };

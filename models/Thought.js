@@ -21,7 +21,7 @@ const thoughtSchema = new Schema(
             type: String,
             required: true,
         },
-        reactions: [reactionSchema], // Array of nested subdocuments
+        reactions: [reactionSchema], // Array of nested documents created with the reactionSchema
     },
     {
         toJSON: {

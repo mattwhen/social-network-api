@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
-    "seed": "node utils/seed"
+    "dev": "nodemon server"
   },
   "author": "mattwhen",
   "license": "MIT",
