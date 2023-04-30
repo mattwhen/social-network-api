@@ -1,4 +1,5 @@
 const { Thought, User } = require("../models");
+const { deleteUser } = require("./userController");
 
 module.exports = {
   // GET all thoughts
@@ -22,7 +23,7 @@ module.exports = {
       res.json(thoughts);
 
       if (!thoughts) {
-       res.status(404);
+        res.status(404);
       }
     } catch (err) {
       res.status(500).json("System error :(", err);
@@ -51,8 +52,8 @@ module.exports = {
         { _id: req.params.thoughtId },
         { $set: req.body },
         { runValidators: true, new: true }
-        );
-        console.log('Here is my thoughts object', thoughts);
+      );
+      console.log("Here is my thoughts object", thoughts);
     } catch (err) {
       res.status(500).json("System error :(", err);
     }
@@ -60,9 +61,38 @@ module.exports = {
   // Delete to remove a thought by it's _id
   async deleteThought(req, res) {
     try {
-      const thoughts = await Thought.findOneAndDelete({ _id: req.params.thoughtId});
+      const thoughts = await Thought.findOneAndDelete({
+        _id: req.params.thoughtId,
+      });
     } catch (err) {
-      res.status(500).json({message: "Could not delete thought"});
+      res.status(500).json({ message: "Could not delete thought" });
     }
-  }
+  },
+  // Create reaction stored in a single thought's reactions array field (POST)
+  async createReaction({ params }, res) {
+    console.log({ params });
+    try {
+      const reaction = await Thought.findOneAndUpdate(
+        { _id: params.thoughtId },
+        { $addToSet: { reactions: body } },
+        { new: true}
+      ); console.log(reaction);
+      if (!reaction) return "Invalid reaction";
+      res.json(reaction, { message: "Added reaction" });
+    } catch (err) {
+      res.status(500).json("Failed to add reaction due to an internal error", err);
+    }
+  },
+  // Delete to pull and remove a reaction by the reaction's reactionId value (DELETE)
+  async deleteReaction({ params }, res) {
+    try {
+      const reaction = await Thought.findOneAndUpdate(
+        { _id: params.thoughtId },
+        { $pull: { reactions: params.reactionId } },
+        { new: true }
+      );
+    } catch (err) {
+      res.status(500).json({ message: "Can't delete friend" });
+    }
+  },
 };
