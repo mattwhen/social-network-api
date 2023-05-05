@@ -5,11 +5,14 @@ module.exports = {
   async getUsers(req, res) {
     try {
       const users = await User.find().populate("friends");
-      console.log(req);
+      console.log(users);
+      if(!users) {
+        res.status(404).json({message: "No users found..."});
+      }
       res.json(users);
     } catch (err) {
       res.status(500).json(err);
-    }
+    } debugger;
   },
   // Get a single user by ID (GET)
   async getSingleUser(req, res) {
@@ -33,7 +36,7 @@ module.exports = {
       const user = await User.create(req.body);
       res.json(user);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json('Failed to create user due to an internal server error', err);
     }
   },
   // Update a user by ID (PUT)
@@ -48,10 +51,9 @@ module.exports = {
       if (!user) {
         return res.status(404).json({ message: "No user with that ID" });
       }
-
       res.json(user);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json('Failed to update user due to an internal server error', err);
     }
   },
   // Delete a user by id AND it's associated thoughts (DELETE)(BONUS)
@@ -70,14 +72,14 @@ module.exports = {
   },
   // Add a new friend to a user's friend list (POST)
   async addFriend({ params }, res) {
-    console.log({ params });
     try {
       const user = await User.findOneAndUpdate(
         { _id: params.userId },
         { $addToSet: { friends: params.friendId } },
         { new: true, runValidators: true }
       );
-      res.json(user, { message: "Added Friend" });
+      console.log('Added friend to friends list!')
+      res.json(user);
     } catch (err) {
       res.status(500).json({ message: "Can't add friend" });
     }

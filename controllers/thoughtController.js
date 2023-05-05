@@ -69,14 +69,14 @@ module.exports = {
 	},
 	// Create reaction stored in a single thought's reactions array field (POST)
 	async createReaction({ params, body }, res) {
-		console.log('here is our request', { params, body });
+		// console.log('here is our request', { params, body });
 		try {
 			const reaction = await Thought.findOneAndUpdate(
 				{ _id: params.thoughtId },
 				{ $addToSet: { reactions: body } },
 				{ new: true, runValidators: true }
 			);
-			console.log('here is our reaction', reaction);
+			// console.log('here is our reaction', reaction);
 			if (!reaction) {
 				res
 					.status(404)
