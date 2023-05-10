@@ -32,6 +32,7 @@ module.exports = {
 	/* POST request to create a new thought (don't forget to push the created thought's 
     _id to the associated user's thoughts array field) */
 	async createThought(req, res) {
+		console.log(req);
 		try {
 			const thoughts = await Thought.create(req.body);
 			console.log('Our request to create a new thought', req.body);
@@ -52,6 +53,7 @@ module.exports = {
 				{ $set: req.body },
 				{ runValidators: true, new: true }
 			);
+			res.json(thoughts);
 			console.log('Here is my thoughts object', thoughts);
 		} catch (err) {
 			res.status(500).json('System error :(', err);
@@ -63,6 +65,7 @@ module.exports = {
 			const thoughts = await Thought.findOneAndDelete({
 				_id: req.params.thoughtId,
 			});
+			res.json(thoughts);
 		} catch (err) {
 			res.status(500).json({ message: 'Could not delete thought' });
 		}
@@ -76,13 +79,12 @@ module.exports = {
 				{ $addToSet: { reactions: body } },
 				{ new: true, runValidators: true }
 			);
-			// console.log('here is our reaction', reaction);
 			if (!reaction) {
 				res
 					.status(404)
 					.json({ message: 'No thoughts with this particular ID!' });
 			}
-      console.log('Added reaction');
+			console.log('Added reaction');
 			res.json(reaction);
 		} catch (err) {
 			res
@@ -95,12 +97,14 @@ module.exports = {
 		try {
 			const reaction = await Thought.findOneAndUpdate(
 				{ _id: params.thoughtId },
-				{ $pull: { reactions: params.reactionId } },
+				{ $pull: { reactions: {_id: params.reactionId }} },
 				{ new: true }
 			);
-      console.log('Removed friend')
+			res.json(reaction);
+			console.log('REACTION DELETED!!', reaction);
+			// console.log('Removed reaction');
 		} catch (err) {
-			res.status(500).json({ message: "Can't delete friend" });
+			res.status(500).json({ message: "Can't delete reaction" });
 		}
 	},
 };
